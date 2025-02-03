@@ -104,11 +104,29 @@ namespace Harmoniq.Services.UserServices
             // Update properties if provided
             user.FirstName = updateUserDto.FirstName ?? user.FirstName;
             user.LastName = updateUserDto.LastName ?? user.LastName;
-            user.ProfileImageUrl = updateUserDto.ProfileImageUrl ?? user.ProfileImageUrl;
+
+            // ✅ Only update the image if a new file is provided
+            if (updateUserDto.ProfileImage != null) // Ensure it's an IFormFile
+            {
+                string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                // Delete the old image before replacing it
+                if (!string.IsNullOrEmpty(user.ProfileImageUrl))
+                {
+                    string oldFilePath = Path.Combine(uploadFolder, user.ProfileImageUrl);
+                    if (File.Exists(oldFilePath))
+                        File.Delete(oldFilePath);
+                }
+
+                // ✅ Pass the IFormFile object correctly
+                string fileName = await FileUploadUtility.SaveFileAsync(updateUserDto.ProfileImage, uploadFolder);
+                user.ProfileImageUrl = fileName;
+            }
 
             await _userRepository.UpdateAsync(user);
-
         }
+
+
 
         public async Task<bool> DeleteUserAsync(int Id)
         {

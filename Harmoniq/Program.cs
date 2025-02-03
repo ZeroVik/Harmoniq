@@ -3,6 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using Harmoniq.Repositories.UserRepositories;
 using Harmoniq.Repositories.Generic;
 using Harmoniq.Services.UserServices;
+using Harmoniq.Repositories.PlaylistSongRepositories;
+using Harmoniq.Services;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Harmoniq.Repositories;
+using Harmoniq.Repositories.SongRepositories;
+using Harmoniq.Repositories.PlaylistRepositories;
+using Harmoniq.Repositories.ArtistRepositories;
+using Harmoniq.Services.AlbumServices;
+using Harmoniq.Services.ArtistService;
 
 
 
@@ -19,8 +30,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPlaylistSongRepository, PlaylistSongRepository>();
+builder.Services.AddScoped<PlaylistSongService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddScoped<SongService>();
+builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+builder.Services.AddScoped<AlbumService>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<ArtistService>();
+
+
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -32,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

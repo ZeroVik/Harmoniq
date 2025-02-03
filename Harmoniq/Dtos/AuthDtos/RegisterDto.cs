@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Harmoniq.Dtos.UserDtos
+namespace Harmoniq.Dtos.AuthDtos
 {
-    public class CreateUserDto
+    public class RegisterDto
     {
         [Required]
         public string Username { get; set; }
@@ -10,12 +10,14 @@ namespace Harmoniq.Dtos.UserDtos
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
         public string Password { get; set; }
+
         [Required]
         public string FirstName { get; set; }
+
         [Required]
         public string LastName { get; set; }
-        public IFormFile ProfileImage { get; set; }
     }
 }
