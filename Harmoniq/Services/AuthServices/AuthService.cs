@@ -6,6 +6,7 @@ using Harmoniq.Models;
 using Harmoniq.Repositories.UserRepositories;
 using Harmoniq.Utilities;
 using Microsoft.Extensions.Configuration;
+using Harmoniq.Enums;
 
 namespace Harmoniq.Services
 {
@@ -35,6 +36,7 @@ namespace Harmoniq.Services
                 PasswordHash = HashPassword(dto.Password),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Role = UserRoleEnum.User,
                 ProfileImageUrl = "default.jpg",
                 CreatedAt = DateTime.UtcNow
             };

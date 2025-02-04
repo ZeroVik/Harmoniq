@@ -14,6 +14,7 @@ using Harmoniq.Repositories.PlaylistRepositories;
 using Harmoniq.Repositories.ArtistRepositories;
 using Harmoniq.Services.AlbumServices;
 using Harmoniq.Services.ArtistService;
+using Harmoniq.Repositories.SubscriptionRepositories;
 
 
 
@@ -40,6 +41,9 @@ builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddScoped<AlbumService>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<ArtistService>();
+builder.Services.AddScoped<PlaylistService>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<SubscriptionService>();
 
 
 

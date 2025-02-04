@@ -1,4 +1,5 @@
-﻿using Harmoniq.Models;
+﻿using Harmoniq.Enums;
+using Harmoniq.Models;
 using Harmoniq.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -17,6 +18,11 @@ namespace Harmoniq.Repositories.UserRepositories
                 _dbSet.Remove(user);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<User>> GetAllAdminsAsync()
+        {
+            return await _context.Users.Where(u => u.Role == UserRoleEnum.Admin).ToListAsync();
         }
 
         public async Task<User> GetUserByEmailAsync(string email)

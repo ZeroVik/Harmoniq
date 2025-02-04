@@ -8,5 +8,6 @@ namespace Harmoniq.Repositories.UserRepositories
     {
         Task<User> GetUserByEmailAsync(string email);
         Task DeleteUserAsync(int userId);
+        Task<IEnumerable<User>> GetAllAdminsAsync();
     }
 }

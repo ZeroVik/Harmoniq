@@ -1,4 +1,6 @@
-﻿namespace Harmoniq.Models
+﻿using Harmoniq.Enums;
+
+namespace Harmoniq.Models
 {
     public class User
     {
@@ -13,6 +15,8 @@
         public string LastName { get; set; }
         public string? ProfileImageUrl { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public UserRoleEnum Role { get; set; } = UserRoleEnum.User;
 
         public Subscription Subscription { get; set; }
 
